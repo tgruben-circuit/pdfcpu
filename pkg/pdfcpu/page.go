@@ -197,7 +197,9 @@ func migrateNamedDests(ctxSrc *model.Context, n *model.Node, migrated map[int]in
 	patchValues := func(xRefTable *model.XRefTable, k string, v *types.Object) error {
 		arr, err := xRefTable.DereferenceArray(*v)
 		if err == nil {
-			arr[0] = patchObject(arr[0], migrated)
+			if len(arr) > 0 {
+				arr[0] = patchObject(arr[0], migrated)
+			}
 			*v = arr
 			return nil
 		}
@@ -206,7 +208,9 @@ func migrateNamedDests(ctxSrc *model.Context, n *model.Node, migrated map[int]in
 			return err
 		}
 		arr = d.ArrayEntry("D")
-		arr[0] = patchObject(arr[0], migrated)
+		if len(arr) > 0 {
+			arr[0] = patchObject(arr[0], migrated)
+		}
 		*v = d
 		return nil
 	}
